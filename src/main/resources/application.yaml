@@ -1,1 +1,8 @@
 metrics.path.app: aggregatr
+
+stubrunner:
+  skip-local-repo: false
+  work-offline: true
+  use-microservice-definitions: true
+  stubs:
+    repository.root: "file://~/.m2/repository"

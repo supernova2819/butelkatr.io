@@ -9,9 +9,9 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 class BottlingConfiguration {
     @Bean
-    BottlerService bottlingService(ServiceRestClient serviceRestClient,
+    BottlerService bottlingService(ServiceRestClient serviceRestClient, BottlingWorker bottlingWorker,
                                    MetricRegistry metricRegistry) {
-        return new BottlerService(serviceRestClient, metricRegistry);
+        return new BottlerService(serviceRestClient, bottlingWorker, metricRegistry);
     }
 }
 

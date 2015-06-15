@@ -20,7 +20,7 @@ public class BottleController {
         this.bottlerService = bottlerService;
     }
 
-    @RequestMapping(method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.POST, produces = Version.V1, consumes = Version.V1)
     public void bottle(@RequestBody BottleRequest bottleRequest) {
         bottlerService.bottle(bottleRequest);
     }

@@ -5,6 +5,6 @@ stubrunner:
   work-offline: true
   use-microservice-definitions: true
   stubs:
-    repository.root: "/Users/szimano/.m2/repository"
+    repository.root: "file://~/.m2/repository"
 
 stubrunner.work-offline: true

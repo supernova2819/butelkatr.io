@@ -4,38 +4,25 @@ import com.codahale.metrics.MetricRegistry;
 import com.ofg.infrastructure.correlationid.CorrelationIdHolder;
 import com.ofg.infrastructure.web.resttemplate.fluent.ServiceRestClient;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.AsyncResult;
 import pl.devoxx.butelkatr.bottling.model.BottleRequest;
-
-import java.util.concurrent.Future;
+import pl.devoxx.butelkatr.bottling.model.Version;
 
 class BottlerService {
 
     private ServiceRestClient restClient;
+    private BottlingWorker bottlingWorker;
 
-    public BottlerService(ServiceRestClient restClient, MetricRegistry metricRegistry) {
+    public BottlerService(ServiceRestClient restClient, BottlingWorker bottlingWorker,  MetricRegistry metricRegistry) {
         this.restClient = restClient;
+        this.bottlingWorker = bottlingWorker;
     }
 
     void bottle(BottleRequest bottleRequest) {
         restClient.forService("prezentatr").put().onUrl("/feed/butelkatr/"+ CorrelationIdHolder.get())
-                .withoutBody().andExecuteFor().aResponseEntity().ofType(ResponseEntity.class);
+                .withoutBody()
+                    .withHeaders().contentType(Version.PREZENTATR_V1)
+                .andExecuteFor().aResponseEntity().ofType(ResponseEntity.class);
 
-        bottleBeer(bottleRequest.getWort());
-    }
-
-    @Async
-    private Future<Void> bottleBeer(Integer wortAmount) {
-        try {
-            Thread.sleep(wortAmount * 5);
-        } catch (InterruptedException e) {
-            // i love this construct
-        }
-
-        restClient.forService("prezentatr").put().onUrl("/feed/bottles/" + CorrelationIdHolder.get() + "/" + wortAmount / 10)
-                .withoutBody().andExecuteFor().aResponseEntity().ofType(ResponseEntity.class);
-
-        return new AsyncResult<>(null);
+        bottlingWorker.bottleBeer(bottleRequest.getWort(), CorrelationIdHolder.get());
     }
 }
