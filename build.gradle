@@ -97,7 +97,7 @@ dependencies {
 }
 
 accurest {
-    baseClassForTests = 'pl.devoxx.aggregatr.aggregation.BaseMockMvcSpec'
+    baseClassForTests = 'pl.devoxx.butelkatr.bottling.BaseMockMvcSpec'
     basePackageForTests = 'pl.devoxx'
     contractsDslDir = contractsDir
     generatedTestSourcesDir = file("${project.buildDir}/generated-sources/accurest")

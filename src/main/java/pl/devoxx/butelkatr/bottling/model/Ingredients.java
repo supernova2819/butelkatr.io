@@ -1,4 +1,4 @@
-package pl.devoxx.butelkatr.aggregation.model;
+package pl.devoxx.butelkatr.bottling.model;
 
 import com.google.common.collect.Lists;
 
