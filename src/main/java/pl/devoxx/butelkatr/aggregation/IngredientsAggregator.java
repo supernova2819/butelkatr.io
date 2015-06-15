@@ -1,4 +1,4 @@
-package pl.devoxx.aggregatr.aggregation;
+package pl.devoxx.butelkatr.aggregation;
 
 import com.codahale.metrics.Meter;
 import com.codahale.metrics.MetricRegistry;
@@ -11,10 +11,10 @@ import com.nurkiewicz.asyncretry.RetryExecutor;
 import com.ofg.infrastructure.web.resttemplate.fluent.ServiceRestClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import pl.devoxx.aggregatr.aggregation.model.Ingredient;
-import pl.devoxx.aggregatr.aggregation.model.IngredientType;
-import pl.devoxx.aggregatr.aggregation.model.Ingredients;
-import pl.devoxx.aggregatr.aggregation.model.Order;
+import pl.devoxx.butelkatr.aggregation.model.Ingredient;
+import pl.devoxx.butelkatr.aggregation.model.IngredientType;
+import pl.devoxx.butelkatr.aggregation.model.Ingredients;
+import pl.devoxx.butelkatr.aggregation.model.Order;
 
 import java.lang.invoke.MethodHandles;
 import java.util.Arrays;

@@ -1,4 +1,4 @@
-package pl.devoxx.aggregatr.base
+package pl.devoxx.butelkatr.base
 import com.ofg.infrastructure.base.MvcWiremockIntegrationSpec
 import com.ofg.infrastructure.discovery.ServiceConfigurationResolver
 import com.ofg.infrastructure.discovery.web.HttpMockServer
@@ -11,7 +11,7 @@ import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.web.servlet.setup.ConfigurableMockMvcBuilder
-import pl.devoxx.aggregatr.Application
+import pl.devoxx.butelkatr.Application
 
 @ContextConfiguration(classes = [Application, Config], loader = SpringApplicationContextLoader, inheritLocations = false)
 class MicroserviceMvcWiremockSpec extends MvcWiremockIntegrationSpec {

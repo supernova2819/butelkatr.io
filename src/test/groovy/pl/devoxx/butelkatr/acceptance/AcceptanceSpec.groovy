@@ -1,9 +1,9 @@
-package pl.devoxx.aggregatr.acceptance
+package pl.devoxx.butelkatr.acceptance
 import groovy.json.JsonSlurper
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.web.servlet.MvcResult
-import pl.devoxx.aggregatr.aggregation.model.Version
-import pl.devoxx.aggregatr.base.MicroserviceMvcWiremockSpec
+import pl.devoxx.butelkatr.aggregation.model.Version
+import pl.devoxx.butelkatr.base.MicroserviceMvcWiremockSpec
 
 import static java.net.URI.create
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post

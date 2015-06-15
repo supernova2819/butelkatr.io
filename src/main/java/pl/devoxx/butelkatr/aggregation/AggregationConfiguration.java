@@ -1,4 +1,4 @@
-package pl.devoxx.aggregatr.aggregation;
+package pl.devoxx.butelkatr.aggregation;
 
 import com.codahale.metrics.MetricRegistry;
 import com.nurkiewicz.asyncretry.RetryExecutor;

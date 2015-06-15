@@ -1,10 +1,10 @@
-package pl.devoxx.aggregatr.aggregation;
+package pl.devoxx.butelkatr.aggregation;
 
 import com.google.common.collect.ImmutableMap;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import pl.devoxx.aggregatr.aggregation.model.IngredientType;
-import pl.devoxx.aggregatr.aggregation.model.Order;
+import pl.devoxx.butelkatr.aggregation.model.IngredientType;
+import pl.devoxx.butelkatr.aggregation.model.Order;
 
 import java.util.List;
 import java.util.Map;

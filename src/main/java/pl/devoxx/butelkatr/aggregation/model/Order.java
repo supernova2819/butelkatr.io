@@ -1,4 +1,4 @@
-package pl.devoxx.aggregatr.aggregation.model;
+package pl.devoxx.butelkatr.aggregation.model;
 
 import lombok.Data;
 

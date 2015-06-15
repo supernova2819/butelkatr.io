@@ -1,4 +1,4 @@
-package pl.devoxx.aggregatr.aggregation;
+package pl.devoxx.butelkatr.aggregation;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -6,9 +6,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import pl.devoxx.aggregatr.aggregation.model.Ingredients;
-import pl.devoxx.aggregatr.aggregation.model.Order;
-import pl.devoxx.aggregatr.aggregation.model.Version;
+import pl.devoxx.butelkatr.aggregation.model.Ingredients;
+import pl.devoxx.butelkatr.aggregation.model.Order;
+import pl.devoxx.butelkatr.aggregation.model.Version;
 
 @RestController
 @RequestMapping(value = "/ingredients", consumes = Version.V1, produces = MediaType.APPLICATION_JSON_VALUE)
