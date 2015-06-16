@@ -1,6 +1,6 @@
 {
     "pl": {
-        "this": "pl/devoxx/aggregatr",
+        "this": "pl/devoxx/butelkatr",
         "dependencies": {
             "prezentatr": {
                 "path": "pl/devoxx/prezentatr"
