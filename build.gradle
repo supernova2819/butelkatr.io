@@ -18,10 +18,8 @@ apply plugin: 'com.ofg.uptodate'
 apply plugin: 'accurest'
 
 ext {
-    versionPrefix = "CD"
-    buildNrLoc = project.hasProperty('buildNr') ? "${buildNr}" : "000"
-    currentVersion = "${versionPrefix}-${buildNrLoc}"
-    projectGroupId = 'pl.devoxx'
+    buildNrLoc = project.hasProperty('buildNr') ? "${buildNr}" : "CD-000"
+    projectGroupId = groupId
 
     contractsDir = file("${project.rootDir}/repository/mappings/")
     wiremockStubsOutputDirRoot = file("${project.buildDir}/production/${project.name}-stubs/")
@@ -29,7 +27,7 @@ ext {
 }
 
 group = projectGroupId
-version = currentVersion
+version = buildNrLoc
 
 sourceCompatibility = '1.8'
 
@@ -125,10 +123,10 @@ artifacts {
 publishing {
     repositories {
         maven {
-            url getProperty('mavenRepoUrl')
+            url getProp('mavenRepoUrl')
             credentials {
-                username getProperty('mavenUser')
-                password getProperty('mavenPassword')
+                username getProp('mavenUser')
+                password getProp('mavenPassword')
             }
         }
     }
@@ -145,4 +143,8 @@ publishing {
             }
         }
     }
+}
+
+String getProp(String propName) {
+    return getProperty(propName) ?: System.properties[propName]
 }
