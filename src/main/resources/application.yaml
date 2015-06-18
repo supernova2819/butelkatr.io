@@ -1,4 +1,4 @@
-metrics.path.app: aggregatr
+metrics.path.app: butelkatr
 
 stubrunner:
   skip-local-repo: false
