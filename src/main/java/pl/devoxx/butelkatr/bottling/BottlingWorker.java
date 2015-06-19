@@ -1,5 +1,6 @@
 package pl.devoxx.butelkatr.bottling;
 
+import com.codahale.metrics.Gauge;
 import com.codahale.metrics.Meter;
 import com.codahale.metrics.MetricRegistry;
 import com.ofg.infrastructure.correlationid.CorrelationIdHolder;
@@ -20,21 +21,24 @@ public class BottlingWorker {
 
     private Integer bottles = 0;
 
+    private Integer bottled = 0;
+
     private Meter bottleCountrMeter;
-    private Meter bottlesInProgress;
 
     @Autowired
     public BottlingWorker(ServiceRestClient restClient, MetricRegistry metricRegistry) {
         this.restClient = restClient;
         this.bottleCountrMeter = metricRegistry.meter("bottles");
-        this.bottlesInProgress = metricRegistry.meter("bottlesInProgress");
+        metricRegistry.register("bottlesInProgress", (Gauge<Integer>) () -> bottled);
     }
 
     @Async
     public void bottleBeer(Integer wortAmount, String correlationId) {
         int bottlesCount = wortAmount / 10;
 
-        bottlesInProgress.mark(bottlesCount);
+        synchronized (this) {
+            bottled += bottlesCount;
+        }
 
         try {
             Thread.sleep(wortAmount * 5);
@@ -44,6 +48,8 @@ public class BottlingWorker {
 
         synchronized (this) {
             bottles += bottlesCount;
+
+            bottled -= bottlesCount;
 
             bottleCountrMeter.mark(bottlesCount);
         }
