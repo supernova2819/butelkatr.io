@@ -1,10 +1,10 @@
 package pl.devoxx.butelkatr.bottling;
 
+import com.codahale.metrics.Meter;
 import com.codahale.metrics.MetricRegistry;
 import com.nurkiewicz.asyncretry.RetryExecutor;
 import com.ofg.infrastructure.correlationid.CorrelationIdHolder;
 import com.ofg.infrastructure.web.resttemplate.fluent.ServiceRestClient;
-import org.springframework.http.ResponseEntity;
 import pl.devoxx.butelkatr.bottling.model.BottleRequest;
 import pl.devoxx.butelkatr.bottling.model.Version;
 
@@ -14,8 +14,7 @@ class BottlerService {
     private BottlingWorker bottlingWorker;
     private RetryExecutor retryExecutor;
 
-    public BottlerService(ServiceRestClient restClient, BottlingWorker bottlingWorker,  RetryExecutor retryExecutor,
-                          MetricRegistry metricRegistry) {
+    public BottlerService(ServiceRestClient restClient, BottlingWorker bottlingWorker,  RetryExecutor retryExecutor) {
         this.restClient = restClient;
         this.bottlingWorker = bottlingWorker;
         this.retryExecutor = retryExecutor;

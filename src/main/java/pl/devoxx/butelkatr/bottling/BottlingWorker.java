@@ -1,5 +1,7 @@
 package pl.devoxx.butelkatr.bottling;
 
+import com.codahale.metrics.Meter;
+import com.codahale.metrics.MetricRegistry;
 import com.ofg.infrastructure.correlationid.CorrelationIdHolder;
 import com.ofg.infrastructure.web.resttemplate.fluent.ServiceRestClient;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,13 +20,22 @@ public class BottlingWorker {
 
     private Integer bottles = 0;
 
+    private Meter bottleCountrMeter;
+    private Meter bottlesInProgress;
+
     @Autowired
-    public BottlingWorker(ServiceRestClient restClient) {
+    public BottlingWorker(ServiceRestClient restClient, MetricRegistry metricRegistry) {
         this.restClient = restClient;
+        this.bottleCountrMeter = metricRegistry.meter("bottles");
+        this.bottlesInProgress = metricRegistry.meter("bottlesInProgress");
     }
 
     @Async
     public void bottleBeer(Integer wortAmount, String correlationId) {
+        int bottlesCount = wortAmount / 10;
+
+        bottlesInProgress.mark(bottlesCount);
+
         try {
             Thread.sleep(wortAmount * 5);
         } catch (InterruptedException e) {
@@ -32,7 +43,9 @@ public class BottlingWorker {
         }
 
         synchronized (this) {
-            bottles += wortAmount / 10;
+            bottles += bottlesCount;
+
+            bottleCountrMeter.mark(bottlesCount);
         }
 
         restClient.forService("prezentatr").put().onUrl("/feed/bottles/" +
