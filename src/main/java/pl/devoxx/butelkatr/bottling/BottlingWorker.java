@@ -4,7 +4,9 @@ import com.codahale.metrics.Gauge;
 import com.codahale.metrics.Meter;
 import com.codahale.metrics.MetricRegistry;
 import com.ofg.infrastructure.correlationid.CorrelationIdHolder;
+import com.ofg.infrastructure.correlationid.CorrelationIdUpdater;
 import com.ofg.infrastructure.web.resttemplate.fluent.ServiceRestClient;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
@@ -15,6 +17,7 @@ import pl.devoxx.butelkatr.bottling.model.Version;
 import java.util.concurrent.Future;
 
 @Component
+@Slf4j
 public class BottlingWorker {
 
     private ServiceRestClient restClient;
@@ -34,6 +37,9 @@ public class BottlingWorker {
 
     @Async
     public void bottleBeer(Integer wortAmount, String correlationId) {
+        CorrelationIdUpdater.updateCorrelationId(correlationId);
+        log.info("Bottling beer...");
+
         int bottlesCount = wortAmount / 10;
 
         synchronized (this) {

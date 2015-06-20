@@ -1,13 +1,13 @@
 package pl.devoxx.butelkatr.bottling;
 
-import com.codahale.metrics.Meter;
-import com.codahale.metrics.MetricRegistry;
 import com.nurkiewicz.asyncretry.RetryExecutor;
 import com.ofg.infrastructure.correlationid.CorrelationIdHolder;
 import com.ofg.infrastructure.web.resttemplate.fluent.ServiceRestClient;
+import lombok.extern.slf4j.Slf4j;
 import pl.devoxx.butelkatr.bottling.model.BottleRequest;
 import pl.devoxx.butelkatr.bottling.model.Version;
 
+@Slf4j
 class BottlerService {
 
     private ServiceRestClient restClient;
