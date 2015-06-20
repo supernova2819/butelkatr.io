@@ -21,12 +21,16 @@ class BottlerService {
     }
 
     void bottle(BottleRequest bottleRequest) {
-        restClient.forService("prezentatr").retryUsing(retryExecutor)
-                .put().onUrl("/feed/butelkatr/"+ CorrelationIdHolder.get())
-                .withoutBody()
-                    .withHeaders().contentType(Version.PREZENTATR_V1)
-                .andExecuteFor().ignoringResponseAsync();
+        notifyPrezentatr();
 
         bottlingWorker.bottleBeer(bottleRequest.getWort(), CorrelationIdHolder.get());
+    }
+
+    void notifyPrezentatr() {
+        restClient.forService("prezentatr").retryUsing(retryExecutor)
+                .put().onUrl("/feed/butelkatr")
+                .withoutBody()
+                .withHeaders().contentType(Version.PREZENTATR_V1)
+                .andExecuteFor().ignoringResponseAsync();
     }
 }

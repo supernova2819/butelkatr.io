@@ -60,8 +60,7 @@ public class BottlingWorker {
             bottleCountrMeter.mark(bottlesCount);
         }
 
-        restClient.forService("prezentatr").put().onUrl("/feed/bottles/" +
-                correlationId + "/" + bottles)
+        restClient.forService("prezentatr").put().onUrl("/feed/bottles/" + bottles)
                 .withoutBody()
                 .withHeaders().contentType(Version.PREZENTATR_V1)
                 .andExecuteFor().aResponseEntity().ofType(ResponseEntity.class);
