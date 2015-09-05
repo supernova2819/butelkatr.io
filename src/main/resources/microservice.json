@@ -1,9 +1,9 @@
 {
     "pl": {
-        "this": "pl/devoxx/butelkatr",
+        "this": "pl/wjug/butelkatr",
         "dependencies": {
             "prezentatr": {
-                "path": "pl/devoxx/prezentatr"
+                "path": "pl/wjug/prezentatr"
             }
         }
     }
