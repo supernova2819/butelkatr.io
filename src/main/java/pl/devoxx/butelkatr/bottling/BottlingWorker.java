@@ -3,18 +3,17 @@ package pl.devoxx.butelkatr.bottling;
 import com.codahale.metrics.Gauge;
 import com.codahale.metrics.Meter;
 import com.codahale.metrics.MetricRegistry;
-import com.ofg.infrastructure.correlationid.CorrelationIdHolder;
 import com.ofg.infrastructure.correlationid.CorrelationIdUpdater;
 import com.ofg.infrastructure.web.resttemplate.fluent.ServiceRestClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.sleuth.Trace;
+import org.springframework.cloud.sleuth.TraceScope;
+import org.springframework.cloud.sleuth.sampler.AlwaysSampler;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
-import org.springframework.scheduling.annotation.AsyncResult;
 import org.springframework.stereotype.Component;
 import pl.devoxx.butelkatr.bottling.model.Version;
-
-import java.util.concurrent.Future;
 
 @Component
 @Slf4j
@@ -27,11 +26,13 @@ public class BottlingWorker {
     private Integer bottled = 0;
 
     private Meter bottleCountrMeter;
+    private Trace trace;
 
     @Autowired
-    public BottlingWorker(ServiceRestClient restClient, MetricRegistry metricRegistry) {
+    public BottlingWorker(ServiceRestClient restClient, MetricRegistry metricRegistry, Trace trace) {
         this.restClient = restClient;
         this.bottleCountrMeter = metricRegistry.meter("bottles");
+        this.trace = trace;
         metricRegistry.register("bottlesInProgress", (Gauge<Integer>) () -> bottled);
     }
 
@@ -60,9 +61,11 @@ public class BottlingWorker {
             bottleCountrMeter.mark(bottlesCount);
         }
 
+        TraceScope scope = this.trace.startSpan("calling_prezentatr", new AlwaysSampler(), null);
         restClient.forService("prezentatr").put().onUrl("/feed/bottles/" + bottles)
                 .withoutBody()
                 .withHeaders().contentType(Version.PREZENTATR_V1)
                 .andExecuteFor().aResponseEntity().ofType(ResponseEntity.class);
+        scope.close();
     }
 }
