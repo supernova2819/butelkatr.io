@@ -27,10 +27,10 @@ class BottlerService {
     }
 
     void notifyPrezentatr() {
-        restClient.forService("prezentatr").retryUsing(retryExecutor)
+        restClient.forService("prezentatr")
                 .put().onUrl("/feed/butelkatr")
                 .withoutBody()
                 .withHeaders().contentType(Version.PREZENTATR_V1)
-                .andExecuteFor().ignoringResponseAsync();
+                .andExecuteFor().ignoringResponse();
     }
 }
