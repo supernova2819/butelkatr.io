@@ -1,8 +1,5 @@
-package pl.devoxx.butelkatr.bottling
+package pl.uservices.butelkatr.bottling
 import com.jayway.restassured.module.mockmvc.RestAssuredMockMvc
-import pl.devoxx.butelkatr.bottling.model.Ingredient
-import pl.devoxx.butelkatr.bottling.model.Ingredients
-import pl.devoxx.butelkatr.bottling.model.BottleRequest
 import spock.lang.Specification
 
 abstract class BaseMockMvcSpec extends Specification {

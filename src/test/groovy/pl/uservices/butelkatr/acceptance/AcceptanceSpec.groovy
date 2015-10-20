@@ -1,9 +1,9 @@
-package pl.devoxx.butelkatr.acceptance
+package pl.uservices.butelkatr.acceptance
 
 import org.springframework.test.context.ContextConfiguration
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers
-import pl.devoxx.butelkatr.bottling.model.Version
-import pl.devoxx.butelkatr.base.MicroserviceMvcWiremockSpec
+import pl.uservices.butelkatr.bottling.model.Version
+import pl.uservices.butelkatr.base.MicroserviceMvcWiremockSpec
 
 import static java.net.URI.create
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post

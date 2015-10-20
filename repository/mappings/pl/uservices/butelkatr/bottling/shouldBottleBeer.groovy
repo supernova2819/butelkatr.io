@@ -3,7 +3,7 @@ io.codearte.accurest.dsl.GroovyDsl.make {
         method 'POST'
         url '/bottle'
         headers {
-            header 'Content-Type': 'application/vnd.pl.devoxx.butelkatr.v1+json'
+            header 'Content-Type': 'application/vnd.pl.uservices.butelkatr.v1+json'
         }
         body ('''{
             "wort": 1000

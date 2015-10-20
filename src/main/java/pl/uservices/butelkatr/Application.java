@@ -1,4 +1,4 @@
-package pl.devoxx.butelkatr;
+package pl.uservices.butelkatr;
 
 import com.ofg.infrastructure.environment.EnvironmentSetupVerifier;
 import org.springframework.boot.SpringApplication;

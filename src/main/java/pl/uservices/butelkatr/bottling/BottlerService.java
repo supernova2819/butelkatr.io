@@ -1,11 +1,11 @@
-package pl.devoxx.butelkatr.bottling;
+package pl.uservices.butelkatr.bottling;
 
 import com.nurkiewicz.asyncretry.RetryExecutor;
 import com.ofg.infrastructure.correlationid.CorrelationIdHolder;
 import com.ofg.infrastructure.web.resttemplate.fluent.ServiceRestClient;
 import lombok.extern.slf4j.Slf4j;
-import pl.devoxx.butelkatr.bottling.model.BottleRequest;
-import pl.devoxx.butelkatr.bottling.model.Version;
+import pl.uservices.butelkatr.bottling.model.BottleRequest;
+import pl.uservices.butelkatr.bottling.model.Version;
 
 @Slf4j
 class BottlerService {

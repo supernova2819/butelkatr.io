@@ -1,4 +1,4 @@
-package pl.devoxx.butelkatr.bottling;
+package pl.uservices.butelkatr.bottling;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -6,8 +6,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-import pl.devoxx.butelkatr.bottling.model.BottleRequest;
-import pl.devoxx.butelkatr.bottling.model.Version;
+import pl.uservices.butelkatr.bottling.model.BottleRequest;
+import pl.uservices.butelkatr.bottling.model.Version;
 
 @RestController
 @RequestMapping(value = "/bottle", consumes = Version.V1, produces = MediaType.APPLICATION_JSON_VALUE)

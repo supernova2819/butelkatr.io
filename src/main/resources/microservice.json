@@ -1,9 +1,9 @@
 {
     "pl": {
-        "this": "pl/wjug/butelkatr",
+        "this": "pl/uservices/butelkatr",
         "dependencies": {
             "prezentatr": {
-                "path": "pl/wjug/prezentatr"
+                "path": "pl/uservices/prezentatr"
             }
         }
     }

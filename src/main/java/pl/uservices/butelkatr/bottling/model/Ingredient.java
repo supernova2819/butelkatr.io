@@ -1,4 +1,4 @@
-package pl.devoxx.butelkatr.bottling.model;
+package pl.uservices.butelkatr.bottling.model;
 
 public class Ingredient {
     public IngredientType type;

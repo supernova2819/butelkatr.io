@@ -1,4 +1,4 @@
-package pl.devoxx.butelkatr.bottling;
+package pl.uservices.butelkatr.bottling;
 
 import com.nurkiewicz.asyncretry.RetryExecutor;
 import com.ofg.infrastructure.discovery.ServiceConfigurationResolver;

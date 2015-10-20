@@ -1,4 +1,4 @@
-package pl.devoxx.butelkatr.bottling;
+package pl.uservices.butelkatr.bottling;
 
 import com.codahale.metrics.Gauge;
 import com.codahale.metrics.Meter;
@@ -13,7 +13,7 @@ import org.springframework.cloud.sleuth.sampler.AlwaysSampler;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
-import pl.devoxx.butelkatr.bottling.model.Version;
+import pl.uservices.butelkatr.bottling.model.Version;
 
 @Component
 @Slf4j
