@@ -1,10 +1,1 @@
-graphite.host: localhost
-
-stubrunner:
-  skip-local-repo: false
-  work-offline: true
-  use-microservice-definitions: true
-  stubs:
-    repository.root: "file://~/.m2/repository"
-
-stubrunner.work-offline: true
+spring.sleuth.zipkin.enabled: false
