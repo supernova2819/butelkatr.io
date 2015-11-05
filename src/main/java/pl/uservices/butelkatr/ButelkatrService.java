@@ -44,6 +44,7 @@ public class ButelkatrService {
 			RetryExecutor retryExecutor, BeerStorage beerStorage) {
 		this.serviceRestClient = serviceRestClient;
 		this.retryExecutor = retryExecutor;
+		this.beerStorage = beerStorage;
 	}
 
 	public void informBeerCreated(Integer quantity) {
