@@ -3,9 +3,12 @@ package pl.uservices.butelkatr;
 import com.netflix.hystrix.HystrixCommand;
 import com.netflix.hystrix.HystrixCommandGroupKey;
 import com.nurkiewicz.asyncretry.RetryExecutor;
+import com.ofg.infrastructure.correlationid.CorrelationIdHolder;
 import com.ofg.infrastructure.discovery.ServiceAlias;
 import com.ofg.infrastructure.web.resttemplate.fluent.ServiceRestClient;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Async;
@@ -27,6 +30,8 @@ import java.util.concurrent.atomic.AtomicLong;
 @Service
 public class ButelkatrService {
 
+	private Logger log = LoggerFactory.getLogger(getClass());
+	
 	private ServiceRestClient serviceRestClient;
 
 	private RetryExecutor retryExecutor;
@@ -37,21 +42,24 @@ public class ButelkatrService {
 	public ButelkatrService(ServiceRestClient serviceRestClient,
 			RetryExecutor retryExecutor) {
 		this.serviceRestClient = serviceRestClient;
-		this.retryExecutor = retryExecutor;
+		this.retryExecutor = retryExecutor;	
 	}
 
 	public void informBeerCreated(Integer quantity) {
 		beerQuantityQueue.offer(quantity);
+		logCorrelationId();
 		produceBottles();
 	}
 
-	
-	
+	private void logCorrelationId() {
+		log.info(CorrelationIdHolder.get());
+	}
+
 	@Async
-	@Scheduled(fixedRate= 5000)
 	private void produceBottles() {
 		createBottles();
 		fillBottles();
+		logCorrelationId();
 	}
 
 	private void  createBottles(){
