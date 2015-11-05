@@ -61,6 +61,7 @@ public class ButelkatrService {
 		Optional<Integer> beerQuantity = beerStorage.getBeer();
 		if (beerQuantity.isPresent()) {
 			BottleDTO bottle = BottleFactory.produceBottle(beerQuantity.get());
+			log.info("Produced {0} bottles", bottle.quantity);
 			notifyBottlesProduced(bottle);
 		}
 	}
