@@ -12,33 +12,44 @@ import com.google.common.base.Optional;
 @Component
 public class BeerStorage {
 	
+	private static final int MIN = 1500;
+	
 	private  Queue<Integer> beerQuantityQueue = new ConcurrentLinkedQueue<>();
 	
 	private  AtomicLong beerQuantitySum = new AtomicLong(0);
+	
+	private AtomicLong beerProcessed = new AtomicLong(0);
 	
 	public  void addBeer(Integer quantity)
 	{
 		beerQuantityQueue.offer(quantity);
 		beerQuantitySum.addAndGet(quantity);
+		beerProcessed.addAndGet(quantity);
 	}
 	
-	public  Optional<Integer> getBeer()
+	public synchronized Optional<Integer> getBeer()
 	{
-		Integer beerQuantity = beerQuantityQueue.poll();
-		if (beerQuantity != null){
-			beerQuantitySum.addAndGet(-beerQuantity);
-			return Optional.of(beerQuantity);
-		}
+		if(beerQuantitySum.get() < MIN) return Optional.absent();
 		
-		return Optional.absent();
+		Integer beerQuantity = 0;
+		do{
+			beerQuantity += beerQuantityQueue.poll();
+			beerQuantitySum.addAndGet(-beerQuantity);
+		}while(beerQuantity < MIN);
+		
+		return Optional.of(beerQuantity);
 	}
 	
-	public  long getTotalBeer(){
+	public long getTotalBeer(){
 		return beerQuantitySum.get();
 	}
 	
 	public  int getQueueSize(){
 		return beerQuantityQueue.size();
+	}
+	
+	public long getTotalBeerProcessed(){
+		return beerProcessed.get();
 	}
 	
 }
