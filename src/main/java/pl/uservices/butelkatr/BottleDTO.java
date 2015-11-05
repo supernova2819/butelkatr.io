@@ -4,14 +4,14 @@ package pl.uservices.butelkatr;
  * Created by i304608 on 05.11.2015.
  */
 public class BottleDTO {
-	public Integer quantity;
+	public Long quantity;
 
 	public BottleDTO()
 	{
-		this(0);
+		this(0L);
 	}
 	
-	public BottleDTO(Integer quantity) {
+	public BottleDTO(Long quantity) {
 		this.quantity = quantity;
 	}
 }
