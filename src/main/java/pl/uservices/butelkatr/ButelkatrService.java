@@ -1,5 +1,6 @@
 package pl.uservices.butelkatr;
 
+import com.google.common.base.Optional;
 import com.netflix.hystrix.HystrixCommand;
 import com.netflix.hystrix.HystrixCommandGroupKey;
 import com.nurkiewicz.asyncretry.RetryExecutor;
@@ -31,22 +32,22 @@ import java.util.concurrent.atomic.AtomicLong;
 public class ButelkatrService {
 
 	private Logger log = LoggerFactory.getLogger(getClass());
-	
+
 	private ServiceRestClient serviceRestClient;
 
 	private RetryExecutor retryExecutor;
-
-	private Queue<Integer> beerQuantityQueue = new ConcurrentLinkedQueue<>();
+	
+	private BeerStorage beerStorage;
 
 	@Autowired
 	public ButelkatrService(ServiceRestClient serviceRestClient,
-			RetryExecutor retryExecutor) {
+			RetryExecutor retryExecutor, BeerStorage beerStorage) {
 		this.serviceRestClient = serviceRestClient;
-		this.retryExecutor = retryExecutor;	
+		this.retryExecutor = retryExecutor;
 	}
 
 	public void informBeerCreated(Integer quantity) {
-		beerQuantityQueue.offer(quantity);
+		beerStorage.addBeer(quantity);
 		logCorrelationId();
 		produceBottles();
 	}
@@ -62,34 +63,34 @@ public class ButelkatrService {
 		logCorrelationId();
 	}
 
-	private void  createBottles(){
+	private void createBottles() {
 		try {
 			Thread.sleep(2000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 	}
-	
-	private void fillBottles() {
-		Integer beerQuantity = beerQuantityQueue.poll();
-		if (beerQuantity == null)
-			return;
 
-		BottleDTO bottle = BottleFactory.produceBottle(beerQuantity);
-		notifyPresenter(bottle);
+	private void fillBottles() {
+
+		Optional<Integer> beerQuantity = beerStorage.getBeer();
+		if (beerQuantity.isPresent()) {
+			BottleDTO bottle = BottleFactory.produceBottle(beerQuantity.get());
+			notifyPresenter(bottle);
+		}
 	}
-	
-	private void notifyPresenter(BottleDTO bootles){
+
+	private void notifyPresenter(BottleDTO bootles) {
 		serviceRestClient
-		.forService(new ServiceAlias("prezentatr"))
-		.retryUsing(retryExecutor)
-		.post()
-		.withCircuitBreaker(
-				HystrixCommand.Setter
-						.withGroupKey(HystrixCommandGroupKey.Factory
-								.asKey("prezentatorBottle")))
-		.onUrl("/bottle").body(bootles)
-		.withHeaders().contentType("application/prezentator.v1+json")
-		.andExecuteFor().ignoringResponseAsync();
+				.forService(new ServiceAlias("prezentatr"))
+				.retryUsing(retryExecutor)
+				.post()
+				.withCircuitBreaker(
+						HystrixCommand.Setter
+								.withGroupKey(HystrixCommandGroupKey.Factory
+										.asKey("prezentatorBottle")))
+				.onUrl("/bottle").body(bootles).withHeaders()
+				.contentType("application/prezentator.v1+json").andExecuteFor()
+				.ignoringResponseAsync();
 	}
 }
