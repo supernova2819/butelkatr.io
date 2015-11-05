@@ -47,6 +47,7 @@ public class ButelkatrService {
 		this.beerStorage = beerStorage;
 	}
 
+	@Async
 	public void informBeerCreated(Integer quantity) {
 		beerStorage.addBeer(quantity);
 		logCorrelationId();
@@ -57,7 +58,7 @@ public class ButelkatrService {
 		log.info(CorrelationIdHolder.get());
 	}
 
-	@Async
+	
 	private void produceBottles() {
 		createBottles();
 		fillBottles();
@@ -66,7 +67,7 @@ public class ButelkatrService {
 
 	private void createBottles() {
 		try {
-			Thread.sleep(2000);
+			Thread.sleep(5000);
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
