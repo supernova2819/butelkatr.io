@@ -1,5 +1,7 @@
 package pl.uservices.butelkatr;
 
+import com.codahale.metrics.Meter;
+import com.codahale.metrics.MetricRegistry;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,12 +29,15 @@ public class ButelkatrService {
 	
 	private BeerStorage beerStorage;
 
+	private Meter producedBottles;
+
 	@Autowired
 	public ButelkatrService(ServiceRestClient serviceRestClient,
-			RetryExecutor retryExecutor, BeerStorage beerStorage) {
+			RetryExecutor retryExecutor, BeerStorage beerStorage, MetricRegistry metricRegistry) {
 		this.serviceRestClient = serviceRestClient;
 		this.retryExecutor = retryExecutor;
 		this.beerStorage = beerStorage;
+		this.producedBottles = metricRegistry.meter("producedBottles");
 	}
 
 	@Async
@@ -60,7 +65,9 @@ public class ButelkatrService {
 		Optional<Long> beerQuantity = beerStorage.getBeer();
 		if (beerQuantity.isPresent()) {
 			BottleDTO bottle = BottleUtil.produceBottle(beerQuantity.get());
+
 			log.info("Produced {0} bottles", bottle.quantity);
+			producedBottles.mark(bottle.quantity);
 			notifyBottlesProduced(bottle);
 		}
 	}

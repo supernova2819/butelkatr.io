@@ -4,6 +4,9 @@ import java.util.Queue;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.concurrent.atomic.AtomicLong;
 
+import com.codahale.metrics.Meter;
+import com.codahale.metrics.MetricRegistry;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import com.google.common.base.Optional;
@@ -19,9 +22,17 @@ public class BeerStorage {
 	private  AtomicLong beerQuantitySum = new AtomicLong(0);
 	
 	private AtomicLong beerProcessed = new AtomicLong(0);
-	
+
+	private Meter incomingBeer;
+
+	@Autowired
+	public BeerStorage(MetricRegistry metricRegistry) {
+		incomingBeer = metricRegistry.meter("incomingBeer");
+	}
+
 	public  void addBeer(Long quantity)
 	{
+		incomingBeer.mark(quantity);
 		beerQuantityQueue.offer(quantity);
 		beerQuantitySum.addAndGet(quantity);
 		beerProcessed.addAndGet(quantity);
