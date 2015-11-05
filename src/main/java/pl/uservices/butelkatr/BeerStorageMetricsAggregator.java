@@ -13,26 +13,16 @@ import org.springframework.stereotype.Component;
 public class BeerStorageMetricsAggregator {
 
         private final BeerStorage beerStorage;
-        private final Meter totalBeer;
-        private final Meter beerQueueLength;
 
         @Autowired
         BeerStorageMetricsAggregator(MetricRegistry metricRegistry, BeerStorage beerStorage) {
             this.beerStorage = beerStorage;
-            this.totalBeer = metricRegistry.meter("totalBeer");
-            this.beerQueueLength = metricRegistry.meter("beerQueueLength");
-            setupMeters(metricRegistry);
+            setupGauges(metricRegistry);
         }
 
-        private void setupMeters(MetricRegistry metricRegistry) {
-            metricRegistry.register("totalBeer", (Gauge<Long>) () -> beerStorage.getTotalBeer());
+        private void setupGauges(MetricRegistry metricRegistry) {
+            metricRegistry.register("totalBeerInQueue", (Gauge<Long>) () -> beerStorage.getTotalBeer());
             metricRegistry.register("beerQueueLength", (Gauge<Integer>) () -> beerStorage.getQueueSize());
+            metricRegistry.register("totalBeerProcessed", (Gauge<Long>) () -> beerStorage.getTotalBeerProcessed());
         }
-
-//        public void doSomethingMeaningful(long sample) {
-//            // do something and mark the metric
-//            totalBeer.mark(sample);
-//            // do something else
-//        }
-
 }
