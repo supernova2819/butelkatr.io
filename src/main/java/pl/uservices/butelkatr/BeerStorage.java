@@ -12,7 +12,7 @@ import com.google.common.base.Optional;
 @Component
 public class BeerStorage {
 	
-	private static final int MIN = 1500;
+	private static final int MIN = 100;
 	
 	private  Queue<Integer> beerQuantityQueue = new ConcurrentLinkedQueue<>();
 	
