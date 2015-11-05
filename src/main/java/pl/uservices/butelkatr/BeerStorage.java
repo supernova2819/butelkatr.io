@@ -14,24 +14,24 @@ public class BeerStorage {
 	
 	private static final int MIN = 100;
 	
-	private  Queue<Integer> beerQuantityQueue = new ConcurrentLinkedQueue<>();
+	private  Queue<Long> beerQuantityQueue = new ConcurrentLinkedQueue<>();
 	
 	private  AtomicLong beerQuantitySum = new AtomicLong(0);
 	
 	private AtomicLong beerProcessed = new AtomicLong(0);
 	
-	public  void addBeer(Integer quantity)
+	public  void addBeer(Long quantity)
 	{
 		beerQuantityQueue.offer(quantity);
 		beerQuantitySum.addAndGet(quantity);
 		beerProcessed.addAndGet(quantity);
 	}
 	
-	public synchronized Optional<Integer> getBeer()
+	public synchronized Optional<Long> getBeer()
 	{
 		if(beerQuantitySum.get() < MIN) return Optional.absent();
 		
-		Integer beerQuantity = 0;
+		Long beerQuantity = 0L;
 		do{
 			beerQuantity += beerQuantityQueue.poll();
 			beerQuantitySum.addAndGet(-beerQuantity);

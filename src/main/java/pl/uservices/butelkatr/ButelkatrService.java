@@ -10,7 +10,6 @@ import com.google.common.base.Optional;
 import com.netflix.hystrix.HystrixCommand;
 import com.netflix.hystrix.HystrixCommandGroupKey;
 import com.nurkiewicz.asyncretry.RetryExecutor;
-import com.ofg.infrastructure.correlationid.CorrelationIdHolder;
 import com.ofg.infrastructure.discovery.ServiceAlias;
 import com.ofg.infrastructure.web.resttemplate.fluent.ServiceRestClient;
 
@@ -37,7 +36,7 @@ public class ButelkatrService {
 	}
 
 	@Async
-	public void informBeerCreated(Integer quantity) {
+	public void informBeerCreated(Long quantity) {
 		beerStorage.addBeer(quantity);
 		notifyBottlesTotal();
 		log.info("Bottling process started.");
@@ -58,16 +57,16 @@ public class ButelkatrService {
 	}
 
 	private void fillBottles() {
-		Optional<Integer> beerQuantity = beerStorage.getBeer();
+		Optional<Long> beerQuantity = beerStorage.getBeer();
 		if (beerQuantity.isPresent()) {
-			BottleDTO bottle = BottleFactory.produceBottle(beerQuantity.get());
+			BottleDTO bottle = BottleUtil.produceBottle(beerQuantity.get());
 			log.info("Produced {0} bottles", bottle.quantity);
 			notifyBottlesProduced(bottle);
 		}
 	}
 	
 	private BottleDTO getBottleQueue(){
-		return BottleFactory.produceBottle(beerStorage.getTotalBeer());
+		return BottleUtil.produceBottle(beerStorage.getTotalBeer());
 	}
 
 	private void notifyBottlesTotal() {

@@ -8,14 +8,14 @@ import javax.validation.constraints.Min;
 public class BeerDTO {
 	
 	@Min(0)
-	public Integer quantity;
+	public Long quantity;
 
 	public BeerDTO(){
-		this(0);
+		this(0L);
 	}
 	
 	
-	public BeerDTO(Integer quantity) {
+	public BeerDTO(Long quantity) {
 		this.quantity = quantity;
 	}
 }
