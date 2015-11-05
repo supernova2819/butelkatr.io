@@ -43,10 +43,11 @@ public class BeerStorage {
 		if(beerQuantitySum.get() < MIN) return Optional.absent();
 		
 		Long beerQuantity = 0L;
-		do{
+		while(!beerQuantityQueue.isEmpty())
+		{
 			beerQuantity += beerQuantityQueue.poll();
 			beerQuantitySum.addAndGet(-beerQuantity);
-		}while(beerQuantity < MIN);
+		}
 		
 		return Optional.of(beerQuantity);
 	}

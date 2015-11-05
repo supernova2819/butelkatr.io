@@ -26,7 +26,7 @@ public class ButelkatrController {
 	@RequestMapping(value = "/beer", method = RequestMethod.POST, consumes = "application/butelkator.v1+json")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
 	public void createBeer(@RequestBody @Validated BeerDTO beerCreationDTO) {
-		log.info("New beer {0} in butelkator.", beerCreationDTO.quantity);
+		log.info("New beer "+beerCreationDTO.quantity+" in butelkator.");
 		butelkatrService.informBeerCreated(beerCreationDTO.quantity);
 		log.info("Beer stored in butelkator.");
 	}

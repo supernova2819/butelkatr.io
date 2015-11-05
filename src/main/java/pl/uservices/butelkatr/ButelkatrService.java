@@ -69,7 +69,7 @@ public class ButelkatrService {
 		if (beerQuantity.isPresent()) {
 			BottleDTO bottle = BottleUtil.produceBottle(beerQuantity.get());
 
-			log.info("Produced {0} bottles", bottle.quantity);
+			log.info("Produced "+bottle.quantity+" bottles");
 			producedBottles.mark(bottle.quantity);
 			notifyBottlesProduced(bottle);
 		}
