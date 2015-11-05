@@ -20,7 +20,7 @@ public class ButelkatrController {
 	
 	@RequestMapping(value = "/beer", method = RequestMethod.POST, consumes = "application/butelkator.v1+json")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
-	public void createBeer(@RequestBody BeerCreationDTO beerCreationDTO) {
-		butelkatrService.informBeerCreated(beerCreationDTO.getQuantity());
+	public void createBeer(@RequestBody BeerDTO beerCreationDTO) {
+		butelkatrService.informBeerCreated(beerCreationDTO.quantity);
 	}
 }

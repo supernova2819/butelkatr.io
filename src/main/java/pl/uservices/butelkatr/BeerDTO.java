@@ -3,15 +3,15 @@ package pl.uservices.butelkatr;
 /**
  * Created by i304608 on 05.11.2015.
  */
-public class BottleDTO {
+public class BeerDTO {
 	public Integer quantity;
 
-	public BottleDTO()
-	{
+	public BeerDTO(){
 		this(0);
 	}
 	
-	public BottleDTO(Integer quantity) {
+	
+	public BeerDTO(Integer quantity) {
 		this.quantity = quantity;
 	}
 }
