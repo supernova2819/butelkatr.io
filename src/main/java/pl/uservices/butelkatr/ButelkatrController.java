@@ -16,37 +16,11 @@ import com.ofg.infrastructure.web.resttemplate.fluent.ServiceRestClient;
 public class ButelkatrController {
 
 	@Autowired
-	private ServiceRestClient serviceRestClient;
-
-	@Autowired
-	private RetryExecutor retryExecutor;
+	ButelkatrService butelkatrService;
 	
 	@RequestMapping(value = "/beer", method = RequestMethod.POST, consumes = "application/butelkator.v1+json")
 	@ResponseStatus(value = HttpStatus.NO_CONTENT)
 	public void createBeer(@RequestBody BeerCreationDTO beerCreationDTO) {
-		try {
-			Thread.sleep(2000);
-			
-			serviceRestClient.forService("prezentatr")
-			.retryUsing(retryExecutor)
-			.post()
-			.withCircuitBreaker(HystrixCommand.Setter.withGroupKey(HystrixCommandGroupKey.Factory.asKey("prezentatorBottle")))
-			.onUrl("/bottle")
-			.body( new BottleDTO(0))
-			.withHeaders().contentType("application/prezentator.v1+json")
-			.andExecuteFor()
-			.ignoringResponseAsync();
-			
-		} catch (InterruptedException e) {
-			// ignore
-		}
-	}
-
-	public ServiceRestClient getServiceRestClient() {
-		return serviceRestClient;
-	}
-
-	public void setServiceRestClient(ServiceRestClient serviceRestClient) {
-		this.serviceRestClient = serviceRestClient;
+		butelkatrService.informBeerCreated(beerCreationDTO.getQuantity());
 	}
 }
