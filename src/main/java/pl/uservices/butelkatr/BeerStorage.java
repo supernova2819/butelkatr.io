@@ -30,7 +30,7 @@ public class BeerStorage {
 		incomingBeer = metricRegistry.meter("incomingBeer");
 	}
 
-	public  void addBeer(Long quantity)
+	public synchronized void addBeer(Long quantity)
 	{
 		incomingBeer.mark(quantity);
 		beerQuantityQueue.offer(quantity);
@@ -48,6 +48,9 @@ public class BeerStorage {
 			beerQuantity += beerQuantityQueue.poll();
 			beerQuantitySum.addAndGet(-beerQuantity);
 		}
+		
+		if(beerQuantitySum.get() < 0L)
+			beerQuantitySum.set(0L);
 		
 		return Optional.of(beerQuantity);
 	}
