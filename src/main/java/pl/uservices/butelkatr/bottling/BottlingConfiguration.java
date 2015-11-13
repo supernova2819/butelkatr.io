@@ -5,12 +5,14 @@ import com.ofg.infrastructure.discovery.ServiceConfigurationResolver;
 import com.ofg.infrastructure.discovery.ServiceResolver;
 import com.ofg.infrastructure.web.resttemplate.fluent.ServiceRestClient;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.context.embedded.FilterRegistrationBean;
 import org.springframework.cloud.sleuth.Sampler;
 import org.springframework.cloud.sleuth.Trace;
 import org.springframework.cloud.sleuth.instrument.web.TraceFilter;
 import org.springframework.cloud.sleuth.sampler.AlwaysSampler;
+import org.springframework.cloud.zookeeper.discovery.dependency.ZookeeperDependencies;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -53,12 +55,12 @@ class BottlingConfiguration {
 
     @Bean
     @Primary
-    public ServiceRestClient serviceRestClientWithRestTemplate(RestTemplate restTemplate, ServiceResolver serviceResolver, ServiceConfigurationResolver configurationResolver) {
-        return new ServiceRestClient(restTemplate, serviceResolver, configurationResolver);
+    public ServiceRestClient serviceRestClientWithRestTemplate(RestTemplate restTemplate, ServiceResolver serviceResolver, ZookeeperDependencies zookeeperDependencies) {
+        return new ServiceRestClient(restTemplate, serviceResolver, zookeeperDependencies);
     }
 
     @Autowired RestTemplate restTemplate;
-    @Autowired ClientHttpRequestFactory clientHttpRequestFactory;
+    @Autowired @Qualifier("requestFactory") ClientHttpRequestFactory clientHttpRequestFactory;
 
     @PostConstruct
     void postConstruct() {

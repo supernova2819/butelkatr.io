@@ -8,8 +8,6 @@ import com.ofg.infrastructure.web.resttemplate.fluent.ServiceRestClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.sleuth.Trace;
-import org.springframework.cloud.sleuth.TraceScope;
-import org.springframework.cloud.sleuth.sampler.AlwaysSampler;
 import org.springframework.http.ResponseEntity;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
@@ -61,11 +59,11 @@ public class BottlingWorker {
             bottleCountrMeter.mark(bottlesCount);
         }
 
-        TraceScope scope = this.trace.startSpan("calling_prezentatr", new AlwaysSampler(), null);
+        //TraceScope scope = this.trace.startSpan("calling_prezentatr", new AlwaysSampler(), null);
         restClient.forService("prezentatr").put().onUrl("/feed/bottles/" + bottles)
                 .withoutBody()
                 .withHeaders().contentType(Version.PREZENTATR_V1)
                 .andExecuteFor().aResponseEntity().ofType(ResponseEntity.class);
-        scope.close();
+        //scope.close();
     }
 }
