@@ -39,6 +39,7 @@ public class BottlingWorker {
     @Async
     public void bottleBeer(Integer wortAmount, String correlationId) {
         CorrelationIdUpdater.updateCorrelationId(correlationId);
+        log.info("Evaporating alcohol...");
         log.info("Bottling beer...");
 
         int bottlesCount = wortAmount / 10;
