@@ -7,8 +7,9 @@ import com.ofg.infrastructure.correlationid.CorrelationIdUpdater;
 import com.ofg.infrastructure.web.resttemplate.fluent.ServiceRestClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.sleuth.Span;
 import org.springframework.cloud.sleuth.Trace;
-import org.springframework.http.ResponseEntity;
+import org.springframework.cloud.sleuth.TraceScope;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import pl.uservices.butelkatr.bottling.model.Version;
@@ -35,7 +36,7 @@ public class BottlingWorker {
     }
 
     @Async
-    public void bottleBeer(Integer wortAmount, String correlationId) {
+    public void bottleBeer(Integer wortAmount, Span correlationId) {
         CorrelationIdUpdater.updateCorrelationId(correlationId);
         log.info("Bottling beer...");
 
@@ -59,11 +60,11 @@ public class BottlingWorker {
             bottleCountrMeter.mark(bottlesCount);
         }
 
-        //TraceScope scope = this.trace.startSpan("calling_prezentatr", new AlwaysSampler(), null);
+        TraceScope scope = this.trace.startSpan("calling_prezentatr", correlationId);
         restClient.forService("prezentatr").put().onUrl("/feed/bottles/" + bottles)
                 .withoutBody()
                 .withHeaders().contentType(Version.PREZENTATR_V1)
-                .andExecuteFor().aResponseEntity().ofType(ResponseEntity.class);
-        //scope.close();
+                .andExecuteFor().ignoringResponseAsync();
+        scope.close();
     }
 }
