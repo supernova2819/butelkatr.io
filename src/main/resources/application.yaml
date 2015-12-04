@@ -1,4 +1,4 @@
-spring.application.name: butelkatr
+spring.application.name: bottling
 
 logging:
   pattern:

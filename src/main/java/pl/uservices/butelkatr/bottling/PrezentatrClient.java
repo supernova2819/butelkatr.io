@@ -8,20 +8,20 @@ import pl.uservices.butelkatr.bottling.model.Version;
 
 import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 
-@FeignClient("prezentatr")
+@FeignClient("presenting")
 @RequestMapping("/feed")
 public interface PrezentatrClient {
     @RequestMapping(
             value = "/bottles/{bottles}",
-            produces = Version.PREZENTATR_V1,
-            consumes = Version.PREZENTATR_V1,
+            produces = Version.PRESENTING_V1,
+            consumes = Version.PRESENTING_V1,
             method = PUT)
     String updateBottles(@PathVariable("bottles") int bottles, @RequestHeader("PROCESS-ID") String processId);
 
     @RequestMapping(
-            value = "/butelkatr",
-            produces = Version.PREZENTATR_V1,
-            consumes = Version.PREZENTATR_V1,
+            value = "/bottling",
+            produces = Version.PRESENTING_V1,
+            consumes = Version.PRESENTING_V1,
             method = PUT)
     void butelkatrFeed(@RequestHeader("PROCESS-ID") String processId);
 }
