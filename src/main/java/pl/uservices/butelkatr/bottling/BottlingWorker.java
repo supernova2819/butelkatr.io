@@ -1,15 +1,11 @@
 package pl.uservices.butelkatr.bottling;
 
-import com.codahale.metrics.Gauge;
-import com.codahale.metrics.Meter;
-import com.codahale.metrics.MetricRegistry;
-import com.ofg.infrastructure.correlationid.CorrelationIdUpdater;
-import com.ofg.infrastructure.web.resttemplate.fluent.ServiceRestClient;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.sleuth.Span;
 import org.springframework.cloud.sleuth.Trace;
-import org.springframework.cloud.sleuth.TraceScope;
+import org.springframework.cloud.sleuth.TraceManager;
+import org.springframework.cloud.sleuth.trace.TraceContextHolder;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Component;
 import pl.uservices.butelkatr.bottling.model.Version;
@@ -18,26 +14,23 @@ import pl.uservices.butelkatr.bottling.model.Version;
 @Slf4j
 public class BottlingWorker {
 
-    private ServiceRestClient restClient;
 
     private Integer bottles = 0;
 
     private Integer bottled = 0;
 
-    private Meter bottleCountrMeter;
-    private Trace trace;
+    private TraceManager traceManager;
+    private PrezentatrClient prezentatrClient;
 
     @Autowired
-    public BottlingWorker(ServiceRestClient restClient, MetricRegistry metricRegistry, Trace trace) {
-        this.restClient = restClient;
-        this.bottleCountrMeter = metricRegistry.meter("bottles");
-        this.trace = trace;
-        metricRegistry.register("bottlesInProgress", (Gauge<Integer>) () -> bottled);
+    public BottlingWorker(TraceManager traceManager, PrezentatrClient prezentatrClient) {
+        this.traceManager = traceManager;
+        this.prezentatrClient = prezentatrClient;
     }
 
     @Async
     public void bottleBeer(Integer wortAmount, Span correlationId) {
-        CorrelationIdUpdater.updateCorrelationId(correlationId);
+        TraceContextHolder.setCurrentTrace(new Trace(correlationId));
         log.info("Bottling beer...");
 
         int bottlesCount = wortAmount / 10;
@@ -47,7 +40,7 @@ public class BottlingWorker {
         }
 
         try {
-            Thread.sleep(wortAmount * 5);
+            Thread.sleep(100);
         } catch (InterruptedException e) {
             // i love this construct
         }
@@ -57,14 +50,10 @@ public class BottlingWorker {
 
             bottled -= bottlesCount;
 
-            bottleCountrMeter.mark(bottlesCount);
         }
 
-        TraceScope scope = this.trace.startSpan("calling_prezentatr", correlationId);
-        restClient.forService("prezentatr").put().onUrl("/feed/bottles/" + bottles)
-                .withoutBody()
-                .withHeaders().contentType(Version.PREZENTATR_V1)
-                .andExecuteFor().ignoringResponseAsync();
-        scope.close();
+        Trace trace = this.traceManager.startSpan("calling_prezentatr", correlationId);
+        prezentatrClient.updateBottles(bottles);
+        traceManager.close(trace);
     }
 }

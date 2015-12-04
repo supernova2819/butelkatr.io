@@ -2,7 +2,7 @@ package pl.uservices.butelkatr.bottling;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.sleuth.TraceContextHolder;
+import org.springframework.cloud.sleuth.trace.TraceContextHolder;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RequestBody;

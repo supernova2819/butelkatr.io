@@ -1,9 +1,16 @@
-spring.application.name: butelkatr
-metrics.path.app: butelkatr
+spring.application.name: uservices/butelkatr
 
-stubrunner:
-  #skip-local-repo: false
-  #work-offline: true
-  use-microservice-definitions: true
-  stubs:
-    repository.root: "http://nexus.uservices.pl:8081/nexus/content/repositories/releases/"
+logging:
+  pattern:
+    level: '%clr([trace=%X{X-Trace-Id:-},span=%X{X-Span-Id:-}]){yellow} %5p'
+
+server:
+  port: 9094
+
+spring.cloud.zookeeper.discovery.root: /pl
+spring.cloud.zookeeper:
+  # prefix is not working ATM - it's not combining the uservices/${spring.application.name}
+  prefix: uservices/
+  dependencies:
+    prezentatr:
+      path: prezentatr
