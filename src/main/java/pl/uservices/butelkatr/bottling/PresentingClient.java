@@ -10,7 +10,7 @@ import static org.springframework.web.bind.annotation.RequestMethod.PUT;
 
 @FeignClient("presenting")
 @RequestMapping("/feed")
-public interface PrezentatrClient {
+public interface PresentingClient {
     @RequestMapping(
             value = "/bottles/{bottles}",
             produces = Version.PRESENTING_V1,
