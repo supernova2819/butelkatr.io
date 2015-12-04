@@ -5,10 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.sleuth.trace.TraceContextHolder;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import pl.uservices.butelkatr.bottling.model.BottleRequest;
 import pl.uservices.butelkatr.bottling.model.Version;
 
@@ -27,10 +24,11 @@ public class BottleController {
     }
 
     @RequestMapping(method = RequestMethod.POST, produces = Version.V1, consumes = Version.V1)
-    public void bottle(@RequestBody BottleRequest bottleRequest, HttpEntity requestEntity) {
+    public void bottle(@RequestBody BottleRequest bottleRequest, HttpEntity requestEntity, @RequestHeader("PROCESS-ID") String processId) {
         log.info("Current traceid is {}", TraceContextHolder.isTracing() ? TraceContextHolder.getCurrentSpan().getTraceId() : "");
         log.info("TraceId from headers {}", requestEntity.getHeaders().get(TRACE_ID_NAME));
-        bottlerService.bottle(bottleRequest);
+        log.info("Process ID from headers {}", processId);
+        bottlerService.bottle(bottleRequest, processId);
     }
 
 }

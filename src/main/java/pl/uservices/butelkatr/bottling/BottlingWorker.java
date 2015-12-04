@@ -29,8 +29,7 @@ public class BottlingWorker {
     }
 
     @Async
-    public void bottleBeer(Integer wortAmount, Span correlationId) {
-        TraceContextHolder.setCurrentTrace(new Trace(correlationId));
+    public void bottleBeer(Integer wortAmount, String correlationId) {
         log.info("Bottling beer...");
 
         int bottlesCount = wortAmount / 10;
@@ -52,8 +51,8 @@ public class BottlingWorker {
 
         }
 
-        Trace trace = this.traceManager.startSpan("calling_prezentatr", correlationId);
-        prezentatrClient.updateBottles(bottles);
-        traceManager.close(trace);
+        //Trace trace = this.traceManager.startSpan("calling_prezentatr", correlationId);
+        prezentatrClient.updateBottles(bottles, correlationId);
+        //traceManager.close(trace);
     }
 }

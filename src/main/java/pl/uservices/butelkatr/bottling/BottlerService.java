@@ -15,12 +15,12 @@ class BottlerService {
         this.prezentatrClient = prezentatrClient;
     }
 
-    void bottle(BottleRequest bottleRequest) {
-        notifyPrezentatr();
-        bottlingWorker.bottleBeer(bottleRequest.getWort(), TraceContextHolder.getCurrentSpan());
+    void bottle(BottleRequest bottleRequest, String processId) {
+        notifyPrezentatr(processId);
+        bottlingWorker.bottleBeer(bottleRequest.getWort(), processId);
     }
 
-    void notifyPrezentatr() {
-        prezentatrClient.butelkatrFeed();
+    void notifyPrezentatr(String processId) {
+        prezentatrClient.butelkatrFeed(processId);
     }
 }
