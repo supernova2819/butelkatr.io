@@ -108,8 +108,6 @@ dependencies {
 task docker(type: Docker) {
     dependsOn 'build'
     dryRun true
-    setEnvironment('CONFIG_FOLDER', '/properties')
-    addFile("properties", "/properties")
     addFile("${libsDir}/${project.name}-${buildNrLoc}.jar", "/${project.name}/${project.name}.jar")
     exposePort(8095)
     entryPoint(['java', '-jar', "/${project.name}/${project.name}.jar"])
@@ -161,6 +159,10 @@ task addHashFile << {
 git.commit.id=${gitCommitId}
 git.commit.time=${gitCommitTime}
 """
+}
+
+bootRun {
+    jvmArgs = project.gradle.startParameter.systemPropertiesArgs.entrySet().collect{"-D${it.key}=${it.value}"}
 }
 
 jar {

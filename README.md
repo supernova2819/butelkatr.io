@@ -1,7 +1,29 @@
-# boot-microservice [![Build Status](https://travis-ci.org/uservice-hackathon/aggregatr.io.svg?branch=master)](https://travis-ci.org/uservice-hackathon/aggregatr.io) [![Coverage Status](http://img.shields.io/coveralls/uservice-hackathon/aggregatr.io/master.svg)](https://coveralls.io/r/uservice-hackathon/aggregatr.io)
+# Bottling service
 
-Aggregatr.io - it will gather all the ingredients to brew your beer!
+Having received the wort it's time to bottle the beer.
+After some time we're updating the presenting service.
 
 ## Requirements
 
-* Java 8
+- Working Zookeeper
+
+## How to run it
+
+```
+./gradlew bootRun
+```
+
+### I don't want Zikpin
+
+Just run it in `dev` mode
+
+```
+./gradlew bootRun -Dspring.profiles.active=dev
+```
+
+## Authors
+
+The code is ported from https://github.com/uservices-hackathon. 
+The authors of the code are:
+- Marcin Grzejszczak (marcingrzejszczak)
+- Tomasz Szymanski (szimano)
