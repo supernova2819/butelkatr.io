@@ -1,14 +1,15 @@
 package pl.uservices.butelkatr.bottling;
 
-import lombok.extern.slf4j.Slf4j;
+import java.net.URI;
+
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.RequestEntity;
 import org.springframework.web.client.RestTemplate;
+
+import lombok.extern.slf4j.Slf4j;
 import pl.uservices.butelkatr.bottling.model.BottleRequest;
 import pl.uservices.butelkatr.bottling.model.Version;
-
-import java.net.URI;
 
 @Slf4j
 class BottlerService {
@@ -26,24 +27,29 @@ class BottlerService {
 
     void bottle(BottleRequest bottleRequest, String processId) {
         notifyPrezentatr(processId);
-        bottlingWorker.bottleBeer(bottleRequest.getWort(), processId);
+        bottlingWorker.bottleBeer(bottleRequest.getWort(), processId, TestConfigurationHolder.TEST_CONFIG.get());
     }
 
     void notifyPrezentatr(String processId) {
-        //callPresentingViaFeign(processId);
-        useRestTemplateToCallPresenting(processId);
+        switch (TestConfigurationHolder.TEST_CONFIG.get().getTestCommunicationType()) {
+            case FEIGN:
+                callPresentingViaFeign(processId);
+                break;
+            default:
+                useRestTemplateToCallPresenting(processId);
+        }
     }
 
     private void callPresentingViaFeign(String processId) {
-        presentingClient.butelkatrFeed(processId);
+        presentingClient.bottlingFeed(processId);
     }
 
-    //TODO: Toggle on property or sth
     private void useRestTemplateToCallPresenting(String processId) {
         log.info("Notifying presenting about beer. Process id [{}]", processId);
         HttpHeaders headers = new HttpHeaders();
         headers.add("PROCESS-ID", processId);
         headers.add("Content-Type", Version.PRESENTING_V1);
+        headers.add(TestConfigurationHolder.TEST_COMMUNICATION_TYPE_HEADER_NAME, TestConfigurationHolder.TEST_CONFIG.get().getTestCommunicationType().name());
         String serviceName = "presenting";
         String url = "feed/bottling";
         URI uri = URI.create("http://" + serviceName + "/" + url);
